@@ -38,13 +38,14 @@ def answer(message: types.Message):
         kb_answers.add(kb_answers_goto)
 
         answers[message.from_user.id] = []
-        print(answers.get(message.from_user.id))
         times[message.from_user.id] = int(time())
 
-        for i in mesh.get_answers(message.text):
-            mess = '<b>📄Задание</b>\n<code>└' + str(i[0]) + '</code>\n<b>✏️Ответ</b>\n<code>└' + str(i[1] + '</code>')
+        for question in mesh.get_answers(message.text):
+            mess = '<b>📄Задание</b>\n<code>└' + str(question[0]) + '</code>\n<b>✏️Ответ</b>\n'
+            for answer in question[1].split(';'):
+                answer = answer.replace('\n', '\n  ')
+                mess += '<code>└' + str(' ' + answer.strip() + '</code>\n')
             answers[message.from_user.id] += [mess]
-            # msg = bot.send_message(message.chat.id, mess, parse_mode="HTML")
 
         msg = bot.send_message(message.chat.id, 'Ответы сгенерированы за ' + str(round(time() - times.get(message.from_user.id), 2)) + ' секунды', reply_markup=kb_answers)
         bot.register_next_step_handler(msg, start)
