@@ -60,8 +60,7 @@ def callback(call):
         if call.message:
             if "cdz_answers" in call.data:
                 for i in answers[call.from_user.id]:
-                    msg = bot.send_message(chat_id=call.message.chat.id, text=i, parse_mode="HTML")
-                bot.register_next_step_handler(msg, start)
+                    bot.send_message(chat_id=call.message.chat.id, text=i, parse_mode="HTML")
     except Exception as e:
         print(repr(e))
 
